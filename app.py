@@ -1,19 +1,12 @@
 import os
-
 import pickle
-
 import warnings
-
 import joblib
-
 import numpy as np
-
 import pandas as pd
-
 import xgboost as xgb
-
+# import boto3
 import streamlit as st
-
 import sklearn
 from sklearn.metrics import r2_score
 from sklearn.ensemble import RandomForestRegressor
@@ -257,9 +250,9 @@ preprocessor = Pipeline(steps=[
 	("ct", column_transformer),
 	("selector", selector)
 ])
-path = r"C:\Users\himansu\OneDrive\Desktop\flightSagemaker\Data\train.csv"
+BASE_DIR = r"C:\Users\himansu\OneDrive\Desktop\flightSagemaker"
 # read the training data
-train = pd.read_csv(path)
+train = pd.read_csv(os.path.join(BASE_DIR, "Data", "train.csv"))
 X_train = train.drop(columns="price")
 y_train = train.price.copy()
 
@@ -267,7 +260,7 @@ y_train = train.price.copy()
 preprocessor.fit(X_train, y_train)
 joblib.dump(preprocessor, "preprocessor.joblib")
 
-# web application
+#web application
 st.set_page_config(
 	page_title="Flights Prices Prediction",
 	page_icon="✈️",
@@ -329,13 +322,29 @@ x_new = pd.DataFrame(dict(
 	for col in ["date_of_journey", "dep_time", "arrival_time"]
 })
 
+# if st.button("Predict"):
+#     saved_preprocessor = joblib.load("preprocessor.joblib")
+#     x_new_pre = saved_preprocessor.transform(x_new)
+
+#     # ✅ Pickle hatao, JSON se load karo
+#     model = xgb.Booster()
+#     model.load_model("xgboost-model.json")
+    
+#     x_new_xgb = xgb.DMatrix(x_new_pre, feature_names=None)
+#     pred = model.predict(x_new_xgb, validate_features=False)[0]
+
+#     st.info(f"The predicted price is {pred:,.0f} INR")
+
+# import boto3
+
 if st.button("Predict"):
-	saved_preprocessor = joblib.load("preprocessor.joblib")
-	x_new_pre = saved_preprocessor.transform(x_new)
+    saved_preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.joblib"))
+    x_new_pre = saved_preprocessor.transform(x_new)
 
-	with open("xgboost-model", "rb") as f:
-		model = pickle.load(f)
-	x_new_xgb = xgb.DMatrix(x_new_pre)
-	pred = model.predict(x_new_xgb)[0]
+    with open(os.path.join(BASE_DIR, "xgboost-model"), "rb") as f:
+        model = pickle.load(f)
 
-	st.info(f"The predicted price is {pred:,.0f} INR")
+    x_new_xgb = xgb.DMatrix(x_new_pre, feature_names=None)
+    pred = model.predict(x_new_xgb, validate_features=False)[0]
+
+    st.info(f"The predicted price is {pred:,.0f} INR")
