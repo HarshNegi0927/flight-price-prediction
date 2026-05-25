@@ -250,9 +250,9 @@ preprocessor = Pipeline(steps=[
 	("ct", column_transformer),
 	("selector", selector)
 ])
-BASE_DIR = r"C:\Users\himansu\OneDrive\Desktop\flightSagemaker"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # read the training data
-train = pd.read_csv(os.path.join(BASE_DIR, "Data", "train.csv"))
+train = pd.read_csv(os.path.join(BASE_DIR,"Data","train.csv"))
 X_train = train.drop(columns="price")
 y_train = train.price.copy()
 
