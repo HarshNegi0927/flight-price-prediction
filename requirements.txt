@@ -1,7 +1,7 @@
+streamlit
 numpy
 pandas
-scikit-learn
-streamlit
-feature-engine
 xgboost
+scikit-learn
+feature_engine
 joblib
