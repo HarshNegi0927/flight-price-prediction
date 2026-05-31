@@ -347,17 +347,13 @@ x_new = pd.DataFrame(dict(
 # ─── PREDICT ──────────────────────────────────────────────────────────────────
 if st.button("Predict Price", type="primary", use_container_width=True):
     try:
-        saved_preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.joblib"))
-        x_new_pre = saved_preprocessor.transform(x_new)
+        x_new_pre = preprocessor.transform(x_new)
 
-        # FIX: JSON model load karo
         model = xgb.Booster()
         model.load_model(os.path.join(BASE_DIR, "xgboost-model.json"))
 
         x_new_xgb = xgb.DMatrix(x_new_pre.values)
         pred_log = model.predict(x_new_xgb)[0]
-
-        # FIX: expm1 — reverse log1p transform
         pred = np.expm1(pred_log)
 
         st.success(f"### Predicted Price: ₹{pred:,.0f} INR")
