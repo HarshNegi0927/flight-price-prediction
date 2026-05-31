@@ -341,8 +341,9 @@ if st.button("Predict"):
     saved_preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.joblib"))
     x_new_pre = saved_preprocessor.transform(x_new)
 
-    with open(os.path.join(BASE_DIR, "xgboost-model"), "rb") as f:
-        model = pickle.load(f)
+    # Ye use karo pickle ki jagah
+    model = xgb.Booster()
+    model.load_model(os.path.join(BASE_DIR, "xgboost-model"))
 
     x_new_xgb = xgb.DMatrix(x_new_pre, feature_names=None)
     pred = model.predict(x_new_xgb, validate_features=False)[0]
