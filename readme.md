@@ -107,8 +107,8 @@ The preprocessing pipeline handles:
 | Split | R² Score |
 |---|---|
 | Train | 0.91 |
-| Validation | 0.79 |
-| **Test** | **0.79** |
+| Validation | 0.80 |
+| **Test** | **0.80** |
 
 ---
 
