@@ -1,5 +1,5 @@
 # ✈️ Flight Price Prediction — AWS SageMaker + Streamlit
-
+## There is a simple and very elaborative guide for this project name flight_price_pridiction_guide.pdf you can refer that for understanding the project easily 
 A machine learning web app that predicts Indian domestic flight prices using XGBoost, trained and tuned on AWS SageMaker with a Streamlit frontend.
 
 🔗 **Live Demo:** https://flight-price-prediction-sd57dhtrdq6bvcvyketqh9.streamlit.app/
